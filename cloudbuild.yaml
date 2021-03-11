@@ -19,8 +19,8 @@ steps:
       - '--platform=managed'
       - '--port=1111'
       - '--timeout=3000'
-      - '--allow-unauthenticated'
-      - '--ingress=internal'
+      - '--no-allow-unauthenticated'
+      - '--ingress=all'
       - '--vpc-connector=cloud-run'
       - '--vpc-egress=private-ranges-only'
 
