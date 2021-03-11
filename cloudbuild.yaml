@@ -1,0 +1,29 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'build', '-t', 'eu.gcr.io/$PROJECT_ID/spring-boot-admin:$BUILD_ID', '.' ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'push', 'eu.gcr.io/$PROJECT_ID/spring-boot-admin:$BUILD_ID' ]
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'alpha'
+      - 'run'
+      - 'deploy'
+      - 'spring-boot-admin'
+      - '--image=eu.gcr.io/$PROJECT_ID/spring-boot-admin:$BUILD_ID'
+      - '--concurrency=10'
+      - '--cpu=1'
+      - '--memory=512Mi'
+      - '--region=europe-west3'
+      - '--max-instances=2'
+      - '--platform=managed'
+      - '--port=1111'
+      - '--timeout=3000'
+      - '--allow-unauthenticated'
+      - '--ingress=internal'
+      - '--vpc-connector=cloud-run'
+      - '--vpc-egress=private-ranges-only'
+
+images:
+  - 'eu.gcr.io/$PROJECT_ID/spring-boot-admin:$BUILD_ID'
+timeout: 3000s
